@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/Users/jasonbienia/Documents/aiGame/Legacy Collection/Assets\" && python3 -c \"\nfrom PIL import Image\nimport os\n\nfiles = [\n  'Packs/grotto_escape_pack/Base pack/Spritesheets/player.png',\n  'Packs/grotto_escape_pack/Base pack/Spritesheets/enemies.png',\n  'Packs/grotto_escape_pack/Base pack/Spritesheets/tiles.png',\n  'Packs/grotto_escape_pack/Base pack/Spritesheets/items.png',\n  'Packs/SpaceShipShooter/spritesheets/laser-bolts.png',\n  'Misc/Explosions pack/explosion-1-a/spritesheet.png',\n  'Environments/bulkhead-walls/v1/layers/bulkhead-walls-back.png',\n  'Environments/bulkhead-walls/v1/layers/bulkhead-walls-pipes.png',\n]\n\nfor f in files:\n  try:\n    img = Image.open\\(f\\)\n    print\\(f'{f}: {img.size}'\\)\n  except Exception as e:\n    print\\(f'{f}: ERROR {e}'\\)\n\")"
+    ]
+  }
+}
