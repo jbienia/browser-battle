@@ -23,6 +23,11 @@ class PreloadScene extends Phaser.Scene {
     this.load.image('bg2-sky',       `${ASSETS}/Environments/parallax-industrial-web/Layers/bg.png`);
     this.load.image('bg2-buildings', `${ASSETS}/Environments/parallax-industrial-web/Layers/buildings.png`);
 
+    this.load.image('bg2-country-back',   `${ASSETS}/Environments/country-platform-files/layers/country-platform-back.png`);
+    this.load.image('bg2-country-tiles',  `${ASSETS}/Environments/country-platform-files/layers/country-platform-tileset.png`);
+    this.load.image('bg2-country-forest', `${ASSETS}/Environments/country-platform-files/layers/country-platform-forest.png`);
+
+
     // Player — Warped City individual PNGs (80×80 each), loaded as separate images
     const PLAYER = `${ASSETS}/Packs/Warped City/V2/Sprites/Player`;
     const loadFrames = (state, count) => {
