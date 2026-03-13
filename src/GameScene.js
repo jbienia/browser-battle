@@ -1,7 +1,7 @@
 // ─── Shared constants (gameplay, not level-specific) ─────────────────────────
 const WORLD_H       = 270;
 const TILE          = 16;
-const GROUND_Y      = WORLD_H - TILE;   // 254
+const GROUND_Y      = WORLD_H - TILE * 3;   // 222
 const PLAYER_SPEED  = 150;
 const JUMP_VEL      = -400;
 const BULLET_SPEED  = 550;
@@ -23,8 +23,11 @@ class GameScene extends Phaser.Scene {
 
   // init() runs before create() and receives data passed via scene.start()
   init(data) {
-    this.levelIndex  = (data && data.levelIndex != null) ? data.levelIndex : 0;
+    // this.levelIndex  = (data && data.levelIndex != null) ? data.levelIndex : 0;
+    this.levelIndex = 1;
     this.levelConfig = LEVELS[this.levelIndex];
+    
+
   }
 
   create() {
@@ -106,9 +109,13 @@ class GameScene extends Phaser.Scene {
   // ── Background ─────────────────────────────────────────────────────────────
   createBackground() {
     // Build TileSprite layers from level config — fixed to camera, tilePositionX updated for parallax
-    this.bgLayers = this.levelConfig.bgLayers.map(({ key }) =>
-      this.add.tileSprite(0, 0, 480, WORLD_H, key).setOrigin(0).setScrollFactor(0)
-    );
+    this.bgLayers = this.levelConfig.bgLayers.map(({ key }) => {
+      const sprite = this.add.tileSprite(0, 0, 480, WORLD_H, key).setOrigin(0).setScrollFactor(0);
+      // Scale tile vertically so it fills full height without repeating
+      const texH = this.textures.get(key).getSourceImage().height;
+      if (texH < WORLD_H) sprite.tileScaleY = WORLD_H / texH;
+      return sprite;
+    });
   }
 
   updateParallax() {
@@ -128,8 +135,10 @@ class GameScene extends Phaser.Scene {
       }
     };
 
-    // Ground — full level width
-    addRow(0, GROUND_Y, this.levelConfig.worldW / TILE, 8);
+    // Ground — invisible collider spanning full level width
+    const ground = this.add.zone(0, GROUND_Y, this.levelConfig.worldW, TILE).setOrigin(0, 0);
+    this.physics.world.enable(ground, Phaser.Physics.Arcade.STATIC_BODY);
+    this.platforms.add(ground);
 
     // Floating platforms from level config
     this.levelConfig.platforms.forEach(([x, y, n]) => addRow(x, y, n, 0));
