@@ -168,7 +168,7 @@ class GameScene extends Phaser.Scene {
     this.player.setScale(0.5);
     this.player.setCollideWorldBounds(true);
     // Body in texture-space (pre-scale): 50×65 → 25×32 game units
-    this.player.body.setSize(50, 65).setOffset(15, 12);
+    this.player.body.setSize(40, 65).setOffset(16, 15);
     this.player.play('p-idle');
   }
 
@@ -231,11 +231,12 @@ class GameScene extends Phaser.Scene {
 
     this.player.play('p-shoot', true);
     this.player.once('animationcomplete-p-shoot', () => {
-      if (this.player.body.blocked.down) this.player.play('p-idle', true);
+      if (!this.player.body.blocked.down) this.player.play('p-jump', true);
+      else this.player.play('p-idle', true);
     });
     this.sound.play('sfx-laser', { volume: 0.5 });
 
-    this.time.delayedCall(1200, () => this.killBullet(b));
+    this.time.delayedCall(300, () => this.killBullet(b));
   }
 
   killBullet(b) {
@@ -301,20 +302,23 @@ class GameScene extends Phaser.Scene {
       Phaser.Input.Keyboard.JustDown(this.keys.w);
 
     const onGround = this.player.body.blocked.down;
+    const shooting = this.player.anims.currentAnim?.key === 'p-shoot';
 
     if (left) {
       this.player.setVelocityX(-PLAYER_SPEED);
       this.facing = -1;
       this.player.setFlipX(true);
-      if (onGround) this.player.play('p-run', true);
+      this.player.body.setOffset(24, 15);
+      if (onGround && !shooting) this.player.play('p-run', true);
     } else if (right) {
       this.player.setVelocityX(PLAYER_SPEED);
       this.facing = 1;
       this.player.setFlipX(false);
-      if (onGround) this.player.play('p-run', true);
+      this.player.body.setOffset(16, 15);
+      if (onGround && !shooting) this.player.play('p-run', true);
     } else {
       this.player.setVelocityX(0);
-      if (onGround) this.player.play('p-idle', true);
+      if (onGround && !shooting) this.player.play('p-idle', true);
     }
 
     if (jumpPressed && onGround) {
@@ -322,7 +326,7 @@ class GameScene extends Phaser.Scene {
       this.sound.play('sfx-jump', { volume: 0.6 });
     }
 
-    if (!onGround) this.player.play('p-jump', true);
+    if (!onGround && !shooting) this.player.play('p-jump', true);
   }
 
   // ── Firing ─────────────────────────────────────────────────────────────────

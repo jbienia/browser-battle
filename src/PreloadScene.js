@@ -14,7 +14,7 @@ class PreloadScene extends Phaser.Scene {
       bar.fillRect(40, 125, 400 * v, 20);
     });
     this.add.text(240, 110, 'Loading...', { fontSize: '14px', color: '#ffffff' }).setOrigin(0.5);
-//dfdj
+
     // Backgrounds — Level 1: Bulkhead
     this.load.image('bg-back',  `${ASSETS}/Environments/bulkhead-walls/v1/layers/bulkhead-walls-back.png`);
     this.load.image('bg-pipes', `${ASSETS}/Environments/bulkhead-walls/v1/layers/bulkhead-walls-pipes.png`);
